@@ -81,9 +81,6 @@ while 1:
 
     if paddle.rect.colliderect(ball.rect):
         direction = 'Up'
-        coordinats[0] = ball.rect.x
-        coordinats[1] = paddle.rect.x
-        move_direction_ball = coordinats[1] - coordinats[0] / 10
     if start_move_ball and direction == 'Down':
         ball.rect.move_ip(0, 1)
     if start_move_ball and direction == 'Up':
