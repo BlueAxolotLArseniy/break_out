@@ -3,18 +3,27 @@ import random
 pygame.init()
 
 def move_paddle():
-    global direction, move_direction_ball
+    global direction, move_direction_ball, start_ball
+    if start_ball:
+        ball.rect.move_ip(0, 1)
     if paddle.rect.colliderect(ball.rect):
+        start_ball = False
         direction = 'Up'
         coordinats[0] = paddle.rect.x - ball.rect.x + 12.5
         move_direction_ball = coordinats[0] / 3.055555555555555555555555555555555555555555555555555555555555555555555555555555555555555555 / 9
         move_direction_ball -= move_direction_ball * 2
-    if start_move_ball and direction == 'Down':
-        ball.rect.move_ip(0, 1)
+    if start_move_ball and direction == 'Down' and start_ball == False:
+        ball.rect.move_ip(move_direction_ball, 1)
     elif start_move_ball and direction == 'Up':
         ball.rect.move_ip(move_direction_ball, -1)
     if ball.rect.y < 5:
+        move_direction_ball_2 = move_direction_ball
         direction = 'Down'
+        move_direction_ball = move_direction_ball_2
+    if ball.rect.x <= 0:
+        move_direction_ball -= move_direction_ball * 2
+    if ball.rect.x >= 800 - 15:
+        move_direction_ball -= move_direction_ball * 2
 
 def stop_move_paddle():
     if event.pos[0] < 266 / 2 + 27.5 and event.pos[1] < 250 + 7.5:
@@ -65,6 +74,9 @@ start_move_ball_game_list = [0, 0]
 direction = 'Down'
 move_direction_ball = float(random.randint(-9, 9) / 10)
 coordinats = [0, 0]
+move_direction_ball_2 = move_direction_ball
+start_ball = False
+one_this = 0
 #pygame.mouse.set_visible(False)
 
 clock = pygame.time.Clock()
@@ -86,7 +98,10 @@ while 1:
             stop_move_paddle()
             sc.blit(ball.image, ball.rect)
         if event.type == pygame.MOUSEBUTTONDOWN:
-            start_move_ball = True
+            if one_this == 0:
+                start_move_ball = True
+                start_ball = True
+                one_this = 1
 
     sc.fill((0, 0, 0))
     sc.blit(ball.image, ball.rect)
