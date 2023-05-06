@@ -2,28 +2,28 @@ import pygame
 import random
 pygame.init()
 
-def move_paddle():
+def move_ball():
     global direction, move_direction_ball, start_ball
     if start_ball:
-        ball.rect.move_ip(0, 1)
+        ball.rect.move_ip(0, 2)
     if paddle.rect.colliderect(ball.rect):
         start_ball = False
         direction = 'Up'
-        coordinats[0] = paddle.rect.x - ball.rect.x + 12.5
-        move_direction_ball = coordinats[0] / 3.055555555555555555555555555555555555555555555555555555555555555555555555555555555555555555 / 9
-        move_direction_ball -= move_direction_ball * 2
+        coordinats = paddle.rect.centerx - ball.rect.centerx
+        print(coordinats)
+        move_direction_ball = coordinats / 35
+        print(move_direction_ball)
+        # move_direction_ball -= move_direction_ball * 2
     if start_move_ball and direction == 'Down' and start_ball == False:
-        ball.rect.move_ip(move_direction_ball, 1)
+        ball.rect.move_ip(move_direction_ball, 2)
     elif start_move_ball and direction == 'Up':
-        ball.rect.move_ip(move_direction_ball, -1)
+        ball.rect.move_ip(move_direction_ball, -2)
     if ball.rect.y < 5:
-        move_direction_ball_2 = move_direction_ball
         direction = 'Down'
-        move_direction_ball = move_direction_ball_2
-    if ball.rect.x <= 0:
+    if ball.rect.x <= 0 or ball.rect.x >= 800 - 15:
         move_direction_ball -= move_direction_ball * 2
-    if ball.rect.x >= 800 - 15:
-        move_direction_ball -= move_direction_ball * 2
+    if ball.rect.y >= 500 - 15:
+        exit()
 
 def stop_move_paddle():
     if event.pos[0] < 266 / 2 + 27.5 and event.pos[1] < 250 + 7.5:
@@ -72,9 +72,8 @@ start_move_ball = False
 start_move_ball_game = False
 start_move_ball_game_list = [0, 0]
 direction = 'Down'
-move_direction_ball = float(random.randint(-9, 9) / 10)
-coordinats = [0, 0]
-move_direction_ball_2 = move_direction_ball
+move_direction_ball = 0
+coordinats = 0
 start_ball = False
 one_this = 0
 #pygame.mouse.set_visible(False)
@@ -109,7 +108,7 @@ while 1:
     sc.blit(block1.image, block1.rect)
     clock.tick(FPS)
 
-    move_paddle()
+    move_ball()
 
     pygame.draw.rect(sc, (255, 255, 255), (266 / 2, 0, 266 * 2, 255), 5)
     pygame.draw.rect(sc, (255, 255, 255), (266 / 2, 250, 266 * 2, 255), 5)
