@@ -9,11 +9,22 @@ def move_ball():
     if paddle.rect.colliderect(ball.rect):
         start_ball = False
         direction = 'Up'
-        coordinats = paddle.rect.centerx - ball.rect.centerx
-        print(coordinats)
-        move_direction_ball = coordinats / 35
-        print(move_direction_ball)
-        # move_direction_ball -= move_direction_ball * 2
+        if paddle.rect.centerx + random.randint(22, 27) - ball.rect.centerx < 0:
+            move_direction_ball = 3
+        elif paddle.rect.centerx + random.randint(22, 27) - ball.rect.centerx > 0:
+            move_direction_ball = -3
+        elif paddle.rect.centerx + random.randint(15, 18) - ball.rect.centerx < 0:
+            move_direction_ball = 2
+        elif paddle.rect.centerx + random.randint(15, 18) - ball.rect.centerx > 0:
+            move_direction_ball = -2
+        elif paddle.rect.centerx + random.randint(7, 9) - ball.rect.centerx < 0:
+            move_direction_ball = 1
+        elif paddle.rect.centerx + random.randint(7, 9) - ball.rect.centerx > 0:
+            move_direction_ball = -1
+        elif paddle.rect.centerx + random.randint(2, 5) - ball.rect.centerx < 0:
+            move_direction_ball = 0
+        elif paddle.rect.centerx + random.randint(2, 5) - ball.rect.centerx > 0:
+            move_direction_ball = 0
     if start_move_ball and direction == 'Down' and start_ball == False:
         ball.rect.move_ip(move_direction_ball, 2)
     elif start_move_ball and direction == 'Up':
@@ -24,7 +35,9 @@ def move_ball():
         move_direction_ball -= move_direction_ball * 2
     if ball.rect.y >= 500 - 15:
         exit()
-
+    if ball.rect.colliderect(block1):
+        move_direction_ball -= move_direction_ball * 2
+        block1.delete_object()
 def stop_move_paddle():
     if event.pos[0] < 266 / 2 + 27.5 and event.pos[1] < 250 + 7.5:
         paddle.rect.x, paddle.rect.y = 266 / 2, 250
@@ -51,11 +64,14 @@ class Paddle(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=(x, y))
 
 class blocks(pygame.sprite.Sprite):
+    delete = False
     def __init__(self, x, y, filename):
         self.image = pygame.image.load(filename).convert()
         self.image.set_colorkey((0, 0, 0))
         self.image = pygame.transform.scale(self.image, (self.image.get_width()*6.8, self.image.get_height()*6.8))
         self.rect = self.image.get_rect(center=(x, y))
+    def delete_object(self):
+        self.rect.
 
 class BALL(pygame.sprite.Sprite):
     def __init__(self, x, y, filename):
@@ -105,7 +121,11 @@ while 1:
     sc.fill((0, 0, 0))
     sc.blit(ball.image, ball.rect)
     sc.blit(paddle.image, paddle.rect)
-    sc.blit(block1.image, block1.rect)
+    try:
+        if block1.delete == False:
+            sc.blit(block1.image, block1.rect)
+    except:
+        pass
     clock.tick(FPS)
 
     move_ball()
