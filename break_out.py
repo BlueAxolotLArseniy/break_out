@@ -21,9 +21,9 @@ def move_ball():
             move_direction_ball = 1
         elif paddle.rect.centerx + random.randint(7, 9) - ball.rect.centerx > 0:
             move_direction_ball = -1
-        elif paddle.rect.centerx + random.randint(2, 5) - ball.rect.centerx < 0:
+        elif paddle.rect.centerx + random.randint(0, 5) - ball.rect.centerx < 0:
             move_direction_ball = 0
-        elif paddle.rect.centerx + random.randint(2, 5) - ball.rect.centerx > 0:
+        elif paddle.rect.centerx + random.randint(0, 5) - ball.rect.centerx > 0:
             move_direction_ball = 0
     if start_move_ball and direction == 'Down' and start_ball == False:
         ball.rect.move_ip(move_direction_ball, 2)
@@ -37,7 +37,49 @@ def move_ball():
         exit()
     if ball.rect.colliderect(block1):
         move_direction_ball -= move_direction_ball * 2
-        block1.delete_object()
+        if ball.rect.y < block1.rect.y:
+            direction = 'Up'
+            move_direction_ball = move_direction_ball - move_direction_ball * 2
+        else:
+            direction = 'Down'
+            move_direction_ball = move_direction_ball - move_direction_ball * 2
+        block1.rect.x = -200
+    if ball.rect.colliderect(block2):
+        move_direction_ball -= move_direction_ball * 2
+        if ball.rect.y < block2.rect.y:
+            direction = 'Up'
+            move_direction_ball = move_direction_ball - move_direction_ball * 2
+        else:
+            direction = 'Down'
+            move_direction_ball = move_direction_ball - move_direction_ball * 2
+        block2.rect.x = -200
+    if ball.rect.colliderect(block3):
+        move_direction_ball -= move_direction_ball * 2
+        if ball.rect.y < block3.rect.y:
+            direction = 'Up'
+            move_direction_ball = move_direction_ball - move_direction_ball * 2
+        else:
+            direction = 'Down'
+            move_direction_ball = move_direction_ball - move_direction_ball * 2
+        block3.rect.x = -200
+    if ball.rect.colliderect(block4):
+        move_direction_ball -= move_direction_ball * 2
+        if ball.rect.y < block4.rect.y:
+            direction = 'Up'
+            move_direction_ball = move_direction_ball - move_direction_ball * 2
+        else:
+            direction = 'Down'
+            move_direction_ball = move_direction_ball - move_direction_ball * 2
+        block4.rect.x = -200
+    if ball.rect.colliderect(block5):
+        move_direction_ball -= move_direction_ball * 2
+        if ball.rect.y < block5.rect.y:
+            direction = 'Up'
+            move_direction_ball = move_direction_ball - move_direction_ball * 2
+        else:
+            direction = 'Down'
+            move_direction_ball = move_direction_ball - move_direction_ball * 2
+        block5.rect.x = -200
 def stop_move_paddle():
     if event.pos[0] < 266 / 2 + 27.5 and event.pos[1] < 250 + 7.5:
         paddle.rect.x, paddle.rect.y = 266 / 2, 250
@@ -70,8 +112,6 @@ class blocks(pygame.sprite.Sprite):
         self.image.set_colorkey((0, 0, 0))
         self.image = pygame.transform.scale(self.image, (self.image.get_width()*6.8, self.image.get_height()*6.8))
         self.rect = self.image.get_rect(center=(x, y))
-    def delete_object(self):
-        self.rect.
 
 class BALL(pygame.sprite.Sprite):
     def __init__(self, x, y, filename):
@@ -92,11 +132,17 @@ move_direction_ball = 0
 coordinats = 0
 start_ball = False
 one_this = 0
+apokalipsis = False
 #pygame.mouse.set_visible(False)
 
 clock = pygame.time.Clock()
 
 block1 = blocks(200, 120, 'stoP.png')
+block2 = blocks(300, 120, 'stoP.png')
+block3 = blocks(400, 120, 'stoP.png')
+block4 = blocks(500, 120, 'stoP.png')
+block5 = blocks(600, 120, 'stoP.png')
+
 
 ball = BALL(400, 200, 'Ball.png')
 
@@ -121,11 +167,13 @@ while 1:
     sc.fill((0, 0, 0))
     sc.blit(ball.image, ball.rect)
     sc.blit(paddle.image, paddle.rect)
-    try:
-        if block1.delete == False:
-            sc.blit(block1.image, block1.rect)
-    except:
-        pass
+
+    sc.blit(block1.image, block1.rect)
+    sc.blit(block2.image, block2.rect)
+    sc.blit(block3.image, block3.rect)
+    sc.blit(block4.image, block4.rect)
+    sc.blit(block5.image, block5.rect)
+
     clock.tick(FPS)
 
     move_ball()
