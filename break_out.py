@@ -1,12 +1,18 @@
+# МПОРТЫ
 import pygame
 import random
 pygame.init()
+
+# ФУНКЦИИ
+
+# расчет мячика и ракетки
 
 def move_ball():
     global direction, move_direction_ball, start_ball, points
     if start_ball:
         ball.rect.move_ip(0, 2)
     if paddle.rect.colliderect(ball.rect):
+        # столкновение
         start_ball = False
         direction = 'Up'
         if paddle.rect.centerx + random.randint(22, 27) - ball.rect.centerx < 27:
@@ -103,6 +109,8 @@ def collision_control():
     if paddle.rect.colliderect(ball.rect):
         direction = 'Up'
 
+# КЛАССЫ
+
 class Paddle(pygame.sprite.Sprite):
     def __init__(self, x, y, filename):
         self.image = pygame.image.load(filename).convert()
@@ -125,6 +133,8 @@ class BALL(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (self.image.get_width()*5, self.image.get_height()*5))
         self.rect = self.image.get_rect(center=(x, y))
 
+# ПЕРЕМЕННЫЕ
+
 sc = pygame.display.set_mode((800, 500))
 pos = 0
 fsd = False
@@ -139,6 +149,7 @@ start_ball = False
 one_this = 0
 apokalipsis = False
 points = 0
+stop_game = True
 #pygame.mouse.set_visible(False)
 
 clock = pygame.time.Clock()
@@ -172,7 +183,7 @@ while 1:
 
     if points == 5:
         exit()
-    
+
     sc.fill((0, 0, 0))
     sc.blit(ball.image, ball.rect)
     sc.blit(paddle.image, paddle.rect)
@@ -185,11 +196,12 @@ while 1:
 
     clock.tick(FPS)
 
-    move_ball()
+    if stop_game == False:
+        move_ball()
 
     pygame.draw.rect(sc, (255, 255, 255), (266 / 2, 0, 266 * 2, 255), 5)
     pygame.draw.rect(sc, (255, 255, 255), (266 / 2, 250, 266 * 2, 255), 5)
     sc.blit(f1.render((str(round(clock.get_fps()))), 5, (180, 0, 0)), (750, 5))
-    # stop_move_paddle()
+
 
     pygame.display.update()
